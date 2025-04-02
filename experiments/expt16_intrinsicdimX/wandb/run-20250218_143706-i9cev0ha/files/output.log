@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "/n/home00/sumedh/spmax_sae/experiments/expt16_intrinsicdimX/trainmodel.py", line 305, in <module>
+    update_status(f"Time to train {EPOCHS} epochs = {round(toc-tic,2)}s ({round((toc-tic)/EPOCHS,2)}s per epoch)")
+NameError: name 'EPOCHS' is not defined

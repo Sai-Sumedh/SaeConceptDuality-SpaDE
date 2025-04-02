@@ -1,0 +1,25 @@
+seed_id = 1
+device = "cuda"
+wandbprojectname = "separability_2dgauss_diffmag"
+experiment_date = "today"
+
+sae_type = "None"
+weight_init = 'random'
+normalize_decoder = 'default'
+resample_deadneurons = False
+sae_width = 128
+kval_topk = 'None'
+
+dataset = "2dgaussian_diffmag"
+num_concepts = 6
+return_concept_loss = True
+data_dim = 2
+save_checkpoints = True
+
+batch_size = 512
+regularizer = "default"
+encoder_reg = True
+gamma_reg = 'default'
+optimizer = "adam"
+clip_grad = True
+online_training = True
