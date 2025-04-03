@@ -9,3 +9,8 @@ Codebase for the synthetic experiments and figures in the paper ["Projecting Ass
 3. `functions/` includes files to preprocess/load data (`get_data.py`), training pipeline for models (`train_test.py`) and miscellaneous functions (`utils.py`)
 4. `experiments/expt_heterogeneity` and `experiments/expt_separability` consist of relevant experiment settings (`settings.txt`); code to train SAEs (`train.py`), and jupyter notebooks to generate figures (both for main paper and appendix)
 5. `experiments/makefigs_vision`, `experiments/makefigs_formallanguage` generate main paper figures for vision and formal language experiments (from results obtained already).
+
+## Usage
+
+1. Go to `experiments/expt_separability` or `experiments/expt_heterogeneity`, choose configuration of SAE in hyperparameters and settings files and run trainmodel.py
+2. Run jupyter notebooks to create main figures/ appendix figures
