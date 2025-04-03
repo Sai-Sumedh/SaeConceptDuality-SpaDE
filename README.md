@@ -12,5 +12,5 @@ Codebase for the synthetic experiments and figures in the paper ["Projecting Ass
 
 ## Usage
 
-1. Go to `experiments/expt_separability` or `experiments/expt_heterogeneity`, choose configuration of SAE in hyperparameters (`hyperparameters2.csv`) and settings (`settings.txt`) files and run `trainmodel.py`
+1. Go to `experiments/expt_separability` or `experiments/expt_heterogeneity`, choose configuration of SAE in hyperparameters (`hyperparameters2.csv`) and settings (`settings.txt`) files and run `trainmodel.py`. Note: _gamma_reg_ is the scaling constant for sparsity regularizer in the loss, _kval_topk_ is the _K_ in TopK
 2. Run jupyter notebooks to create main figures/ appendix figures
