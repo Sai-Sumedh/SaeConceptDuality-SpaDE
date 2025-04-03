@@ -4,7 +4,7 @@ Codebase for the synthetic experiments and figures in the paper ["Projecting Ass
 
 ## Overview
 
-1. `models.py` defines SAEs- ReLU, JumpReLU, TopK and SpaDE (see `functions/utils.py` for implementation of JumpReLU
+1. `models.py` defines SAEs- ReLU, JumpReLU, TopK and SpaDE (see `functions/utils.py` for implementation of JumpReLU)
 2. `syntheticdatasets/` consists of jupyter notebooks which create datasets of gaussian clusters for the separability and heterogeneity experiments
 3. `functions/` includes files to preprocess/load data (`get_data.py`), training pipeline for models (`train_test.py`) and miscellaneous functions (`utils.py`)
 4. `experiments/expt_heterogeneity` and `experiments/expt_separability` consist of relevant experiment settings (`settings.txt`); code to train SAEs (`train.py`), and jupyter notebooks to generate figures (both for main paper and appendix)
