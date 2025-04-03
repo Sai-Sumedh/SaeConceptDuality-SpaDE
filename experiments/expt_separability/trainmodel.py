@@ -39,7 +39,7 @@ if __name__=='__main__':
     ARGS_FROM_FILE = True
     RESULTS_PATH = './'
     FIGURES_PATH = RESULTS_PATH+'figs/'
-    LAB_DIR = os.environ['USERDIR']
+    LAB_DIR = os.environ['USERDIR'] #change this as needed for data path
     DATA_PATH = LAB_DIR+'/data'
     STATUS_PATH = RESULTS_PATH + 'status_files/'
     SAVE_MODELS_PATH = RESULTS_PATH+'saved_models/'
@@ -106,9 +106,9 @@ if __name__=='__main__':
     #training params
     # LEARNING_RATE = 1e-2
     MOMENTUM = 0.9
-    EPOCHS = 200 #for multiepoch training over entire data (not online)
+    EPOCHS = 1 #for multiepoch training over entire data (NOT USED)
     
-    #update- to see if weight decay causes 0 weights
+    #no weight decay
     LEARNING_RATE = 1e-2
     WEIGHT_DECAY = 0.0
     #experiment name using random words
@@ -181,7 +181,6 @@ if __name__=='__main__':
         # set the wandb project where this run will be logged
         project=args.wandbprojectname,
         name=EXPT_NAME,
-        entity='harvard01',
         # track hyperparameters and run metadata
         config=vars(args)
     )

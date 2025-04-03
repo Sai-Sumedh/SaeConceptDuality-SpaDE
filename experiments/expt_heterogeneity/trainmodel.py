@@ -177,10 +177,9 @@ if __name__=='__main__':
         project=args.wandbprojectname,
         name=EXPT_NAME,
         # track hyperparameters and run metadata
-        config=vars(args),
-        entity='harvard01'
+        config=vars(args)
     )
-
+    EPOCHS = 1 #number of epochs if multi-epoch training (not used for online)
     EPOCHSnum = math.ceil(len(train_data)/args.batch_size) if args.online_training else EPOCHS
     
     scheduler = torch.optim.lr_scheduler.CosineAnnealingLR(optimizer, T_max=EPOCHSnum, eta_min=1e-4) 
