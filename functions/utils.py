@@ -48,7 +48,8 @@ def resample_deadlatents(model, dataloader, num_batches=15, threshold = 0.998, n
     #compute loss of model on different examples
     mseloss_per_ex = torch.sum(torch.pow(pred-big_batch_data, 2), dim=-1)
     #get top numdead data points with highest mse; ensure that you pick data points and not noise (outlier) points
-    _, top_indices = torch.topk(mseloss_per_ex*((big_batch_labels!=noise_label).squeeze()), numdead) #avoid noise (label=4) points by making their mse 0 for getting top_indices
+    _, top_indices = torch.topk(mseloss_per_ex*((big_batch_labels!=noise_label).squeeze()), numdead) 
+    #avoid noise (label=4) points by making their mse 0 for getting top_indices
     #reinit dead neurons' encoder weights with poorly explained examples
     if numdead>0:
         dead_neuron_indices = torch.nonzero(dead_neurons).squeeze()
@@ -62,6 +63,12 @@ def resample_deadlatents(model, dataloader, num_batches=15, threshold = 0.998, n
 
 
 def linear_pieces(model, data, receptive_fields=False, activation_heatmaps = False):
+    """
+    get linear pieces of a piecewise linear model with different colors per piece
+    also returns receptive fields and activation heatmaps if receptive_fields and activation_heatmaps are True resp.
+    model: (torch.nn.Module) model to get linear pieces from
+    data: (torch.Tensor) data- a meshgrid- to use for getting linear pieces
+    """
     numneuro = model.width
     np.random.seed(1)
     hues = np.linspace(0, 1, numneuro, endpoint=False)  # Evenly spaced hues
@@ -107,61 +114,6 @@ def linear_pieces(model, data, receptive_fields=False, activation_heatmaps = Fal
     #     return linpieces
     # else:
     #     return linpieces, Rfall
-
-def rectangle(x):
-    # rectangle function
-    return ((x >= -0.5) & (x <= 0.5)).float()
-
-class StepFunction(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, input, threshold, bandwidth):
-        if not isinstance(threshold, torch.Tensor):
-            threshold = torch.tensor(threshold, dtype=input.dtype, device=input.device)
-        if not isinstance(bandwidth, torch.Tensor):
-            bandwidth = torch.tensor(bandwidth, dtype=input.dtype, device=input.device)
-        ctx.save_for_backward(input, threshold, bandwidth)
-        return (input > threshold).type(input.dtype)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        x, threshold, bandwidth = ctx.saved_tensors
-        grad_input = 0.0*grad_output #no ste to input
-        grad_threshold = (
-            -(1.0 / bandwidth)
-            * rectangle((x - threshold) / bandwidth)
-            * grad_output
-        ).sum(dim=0, keepdim=True)
-        return grad_input, grad_threshold, None  # None for bandwidth since const
-
-def step_fn(input, threshold, bandwidth):
-    return StepFunction.apply(input, threshold, bandwidth)
-
-class JumpReLU(torch.autograd.Function):
-
-    @staticmethod
-    def forward(ctx, x, threshold, bandwidth):
-        if not isinstance(bandwidth, torch.Tensor):
-            bandwidth = torch.tensor(bandwidth, dtype=x.dtype, device=x.device)
-        ctx.save_for_backward(x, threshold, bandwidth)
-        return x*(x>threshold)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        x, threshold, bandwidth = ctx.saved_tensors
-
-        # Compute gradients
-        x_grad = (x > threshold).float() * grad_output
-        threshold_grad = (
-            -(threshold / bandwidth)
-            * rectangle((x - threshold) / bandwidth)
-            * grad_output
-        ).sum(dim=0, keepdim=True)  # Aggregating across batch dimension
-        
-        return x_grad, threshold_grad, None  # None for bandwidth since const
-
-def jumprelu(x, threshold, bandwidth):
-    return JumpReLU.apply(x, threshold, bandwidth)
-
 
 
 def softplus_inverse(input, beta=1.0, threshold=20.0):
