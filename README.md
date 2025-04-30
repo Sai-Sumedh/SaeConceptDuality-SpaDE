@@ -23,5 +23,6 @@ Codebase for the synthetic experiments and figures in the paper ["Projecting Ass
 
     d. run `trainmodel.py`. 
 
-Note: _gamma_reg_ is the scaling constant for sparsity regularizer in the loss, _kval_topk_ is the _K_ in TopK
 3. *Generating figures*: Open `mainfigures.ipynb` or `appendixfigures.ipynb`, modify `dataname` and `DATA_PATH`, and run the jupyter notebook to replicate main figures/ appendix figures
+
+Note: _gamma_reg_ is the scaling constant for sparsity regularizer in the loss, _kval_topk_ is the _K_ in TopK
