@@ -14,9 +14,14 @@ Codebase for the synthetic experiments and figures in the paper ["Projecting Ass
 
 1. *Generate synthetic data*: Go to `syntheticdatasets/` and in either notebook, modify `dataset_dir` to choose location to save data. Run this notebook.
 2. *Run Synthetic data experiments*: 
+
     a. Go to `experiments/expt_separability` or `experiments/expt_heterogeneity`, 
+
     b. choose configuration of SAE in hyperparameters (`hyperparameters2.csv`) and 
+
     c. modify `dataset` and `datapath` in settings (`settings.txt`) files and 
+
     d. run `trainmodel.py`. 
+
 Note: _gamma_reg_ is the scaling constant for sparsity regularizer in the loss, _kval_topk_ is the _K_ in TopK
 3. *Generating figures*: Open `mainfigures.ipynb` or `appendixfigures.ipynb`, modify `dataname` and `DATA_PATH`, and run the jupyter notebook to replicate main figures/ appendix figures
