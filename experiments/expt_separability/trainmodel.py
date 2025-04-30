@@ -60,7 +60,7 @@ if __name__=='__main__':
     #get parameters from settings file- 
     # note that parameters loaded from hyperparameters file overwrite any parameters in settings file
     args = load_args_from_file('./settings.txt')
-    DATA_PATH = args.data_path #change this to your data path
+    DATA_PATH = args.data_path 
 
     #from hyperparameters file
     args.sae_type = sae_type 
