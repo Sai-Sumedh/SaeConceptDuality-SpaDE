@@ -36,7 +36,7 @@ if __name__=='__main__':
         gamma_reg = float(hyperparameters['gamma_reg'])
         # scale = hyperparameters['scale']
     else:
-        raise ValueError(f"No sae width found for task {argsX.task_id}")
+        raise ValueError(f"No sae hyperparams found for task {argsX.task_id}")
     
    
     
