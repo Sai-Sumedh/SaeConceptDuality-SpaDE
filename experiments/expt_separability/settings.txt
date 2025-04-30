@@ -10,7 +10,7 @@ device = "cuda"
 wandbprojectname = "separability_2dgauss_diffmag"
 experiment_date = "today"
 
-# SAE properties
+# SAE properties (some come from hyperparams, hence none)
 sae_type = "None"
 weight_init = 'random'
 normalize_decoder = 'default'
