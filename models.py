@@ -3,7 +3,7 @@ from sparsemax import Sparsemax
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
-from functions.utils import softplus_inverse
+from functions.utils import softplus_inverse, jumprelu
 
 class SAE(torch.nn.Module):
     def __init__(self, dimin=2, width=5, sae_type='relu', kval_topk=None, \
@@ -155,57 +155,3 @@ class SAE(torch.nn.Module):
         else:
             return x, xint
 
-
-
-# functions for the jumprelu nonlinearity (adapted from Rajamanoharan et al, "Jumping Ahead ..." (2024))
-
-def rectangle(x):
-    # rectangle function
-    return ((x >= -0.5) & (x <= 0.5)).float()
-
-class StepFunction(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, input, threshold, bandwidth):
-        if not isinstance(threshold, torch.Tensor):
-            threshold = torch.tensor(threshold, dtype=input.dtype, device=input.device)
-        if not isinstance(bandwidth, torch.Tensor):
-            bandwidth = torch.tensor(bandwidth, dtype=input.dtype, device=input.device)
-        ctx.save_for_backward(input, threshold, bandwidth)
-        return (input > threshold).type(input.dtype)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        x, threshold, bandwidth = ctx.saved_tensors
-        grad_input = 0.0*grad_output #no ste to input
-        grad_threshold = (
-            -(1.0 / bandwidth)
-            * rectangle((x - threshold) / bandwidth)
-            * grad_output
-        ).sum(dim=0, keepdim=True)
-        return grad_input, grad_threshold, None  # None for bandwidth since const
-
-def step_fn(input, threshold, bandwidth):
-    return StepFunction.apply(input, threshold, bandwidth)
-
-class JumpReLU(torch.autograd.Function):
-    @staticmethod
-    def forward(ctx, x, threshold, bandwidth):
-        if not isinstance(bandwidth, torch.Tensor):
-            bandwidth = torch.tensor(bandwidth, dtype=x.dtype, device=x.device)
-        ctx.save_for_backward(x, threshold, bandwidth)
-        return x*(x>threshold)
-
-    @staticmethod
-    def backward(ctx, grad_output):
-        x, threshold, bandwidth = ctx.saved_tensors
-        # Compute gradients
-        x_grad = (x > threshold).float() * grad_output
-        threshold_grad = (
-            -(threshold / bandwidth)
-            * rectangle((x - threshold) / bandwidth)
-            * grad_output
-        ).sum(dim=0, keepdim=True)  # Aggregating across batch dimension
-        return x_grad, threshold_grad, None  # None for bandwidth since const
-
-def jumprelu(x, threshold, bandwidth):
-    return JumpReLU.apply(x, threshold, bandwidth)
