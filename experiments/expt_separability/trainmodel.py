@@ -62,15 +62,6 @@ if __name__=='__main__':
     args = load_args_from_file('./settings.txt')
     DATA_PATH = args.data_path 
 
-    #from hyperparameters file
-    args.sae_type = sae_type 
-    args.kval_topk = kval_topk
-    args.gamma_reg = gamma_reg
-    sae_width = args.sae_width
-    device = args.device
-    if device=='cuda':
-        torch.cuda.empty_cache()
-
     #set regularizer based on nonlinearity if 'default' is given in settings
     if args.regularizer == 'default':
         
@@ -121,6 +112,17 @@ if __name__=='__main__':
         elif args.sae_type=='sparsemax_dist':
             args.normalize_decoder = False
 
+
+    #from hyperparameters file: overwrites settings file args
+    args.sae_type = sae_type 
+    args.kval_topk = kval_topk
+    args.gamma_reg = gamma_reg
+    sae_width = args.sae_width
+    device = args.device
+    if device=='cuda':
+        torch.cuda.empty_cache()
+
+    
     #training params
     MOMENTUM = 0.9
     EPOCHS = 1 #for multiepoch training over entire data (we train online so this is not used)
