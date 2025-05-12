@@ -62,6 +62,10 @@ if __name__=='__main__':
     args = load_args_from_file('./settings.txt')
     DATA_PATH = args.data_path 
 
+    #from hyperparameters file: overwrites settings file args
+    args.sae_type = sae_type 
+    args.kval_topk = kval_topk
+
     #set regularizer based on nonlinearity if 'default' is given in settings
     if args.regularizer == 'default':
         
@@ -114,8 +118,6 @@ if __name__=='__main__':
 
 
     #from hyperparameters file: overwrites settings file args
-    args.sae_type = sae_type 
-    args.kval_topk = kval_topk
     args.gamma_reg = gamma_reg
     sae_width = args.sae_width
     device = args.device
